@@ -7,7 +7,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import MovieModal from "../MovieModal/MovieModal";
 import { useState } from "react";
 import { fetchMovies } from "../../services/movieService";
-import type { Movie } from "../../type/movie";
+import type { Movie } from "../../types/movie";
 
 const notify = () => toast.error('No movies found for your request.');
 export default function App() {
