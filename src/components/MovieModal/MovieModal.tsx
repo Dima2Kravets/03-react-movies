@@ -5,7 +5,7 @@ import { useEffect } from "react";
 interface MovieModalProps {
   onClose: () => void;
 }
-export default function MovieModal({ onClose }: MovieModalProps) {
+export default function MovieModal({ onClose}: MovieModalProps) {
      const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -35,7 +35,7 @@ export default function MovieModal({ onClose }: MovieModalProps) {
       &times;
     </button>
     <img
-      src="https://image.tmdb.org/t/p/original/backdrop_path"
+      src= ""
       alt="movie_title"
       className={css.image}
     />

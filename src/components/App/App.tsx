@@ -1,14 +1,38 @@
 import css from "./App.module.css";
-// import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import MovieModal from "../MovieModal/MovieModal";
 import { useState } from "react";
-// const notify = () => toast.error('No movies found for your request.');
+import { fetchMovies } from "../../services/movieService";
+import type { Movie } from "../../type/movie";
+
+const notify = () => toast.error('No movies found for your request.');
 export default function App() {
-const [isModalOpen, setIsModalOpen] = useState(false);
+ const [movies, setMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const handleSearch = async (movie: string) => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      const data = await fetchMovies(movie);
+      setMovies(data);
+        if (data.length === 0) {
+        notify();
+      }
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+ 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
 
@@ -18,12 +42,14 @@ const [isModalOpen, setIsModalOpen] = useState(false);
     return (
       <div className={css.app} >
         
-        <SearchBar onSubmit={() => { }} />
-        <MovieGrid onSelect={()=>{}} movies={[]}/>
-        <Loader />
-        <ErrorMessage />
+        <SearchBar onSubmit={handleSearch} />
+        <Toaster/>
+        <MovieGrid  movies={movies}/>
+              
         <button onClick={openModal}>Open modal</button>
-        {isModalOpen && <MovieModal onClose={closeModal} />}
+        {isModalOpen && <MovieModal onClose={closeModal}  />}
+        {isLoading && <Loader />}
+        {isError && <ErrorMessage />}
     </div>
   );
 }

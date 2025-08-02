@@ -1,15 +1,20 @@
 import css from "./SearchBar.module.css"
-// const notify = () => toast.error('No movies found for your request.');
+import toast, { Toaster } from 'react-hot-toast';
 interface SearchBarProps{
-  onSubmit: (value: string)=>void,
+  onSubmit: (query: string) => void;
 }
+const notify = () => toast.error('Please enter your search query.');
 export default function SearchBar({ onSubmit } : SearchBarProps) {
   const handleSubmit = (formData: FormData) => {
     const query = formData.get("query") as string;
+      if (query === "") {
+        notify();
+      return;
+    }
     onSubmit(query);
   };
     return (
-        <header className={css.header}>
+  <header className={css.header}>
   <div className={css.container}>
     <a
       className={css.link}
@@ -32,7 +37,8 @@ export default function SearchBar({ onSubmit } : SearchBarProps) {
         Search
       </button>
     </form>
-  </div>
+        </div>
+      <Toaster/>
 </header>
     )
 }
