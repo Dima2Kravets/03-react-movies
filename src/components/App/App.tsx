@@ -10,14 +10,15 @@ import { fetchMovies } from "../../services/movieService";
 import type { Movie } from "../../types/movie";
 
 const notify = () => toast.error('No movies found for your request.');
+
 export default function App() {
  const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  
   const handleSelectMovie = (movie: Movie) => {
     setSelectedMovie(movie);
-    setIsModalOpen(true);
   };
 
   const handleSearch = async (movie: string) => {
@@ -36,20 +37,18 @@ export default function App() {
     }
   };
 
- 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const closeModal = () => setIsModalOpen(false);
-
+   const closeModal = () => {
+    setSelectedMovie(null)
+  };
 
     return (
       <div className={css.app} >
         
         <SearchBar onSubmit={handleSearch} />
         <Toaster/>
-        <MovieGrid movies={movies} onSelectMovie={handleSelectMovie} />
-        {isModalOpen && selectedMovie && (
-  <MovieModal movie={selectedMovie} onClose={closeModal} />
+        <MovieGrid movies={movies} onSelect={handleSelectMovie} />
+        {selectedMovie && (
+          <MovieModal movie={selectedMovie} onClose={closeModal} />
 )}
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
